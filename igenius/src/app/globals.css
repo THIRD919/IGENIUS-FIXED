@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 263 70% 50%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 263 70% 95%;
+    --accent-foreground: 263 70% 30%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 263 70% 50%;
+    --radius: 0.75rem;
+  }
+}
+
+@layer base {
+  * { @apply border-border; }
+  body {
+    @apply bg-[#F8F7FF] text-foreground;
+    font-family: var(--font-sans), system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+}
+
+/* FullCalendar overrides */
+.fc .fc-toolbar-title { font-size: 1rem !important; font-weight: 700 !important; }
+.fc .fc-button-primary {
+  background-color: #7C3AED !important;
+  border-color: #7C3AED !important;
+  font-size: 0.8rem !important;
+}
+.fc .fc-button-primary:hover { background-color: #6D28D9 !important; }
+.fc .fc-daygrid-event {
+  border-radius: 4px !important;
+  font-size: 11px !important;
+  padding: 1px 4px !important;
+}
+.fc .fc-col-header-cell { font-weight: 700 !important; font-size: 12px !important; }
+.fc .fc-day-today { background: #F5F3FF !important; }
+.fc .fc-day-today .fc-daygrid-day-number {
+  background: #7C3AED;
+  color: #fff;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #C4B5FD; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #7C3AED; }
+
+/* Toast animation */
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+.toast-animate { animation: slideInRight 0.3s ease; }

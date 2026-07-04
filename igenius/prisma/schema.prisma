@@ -1,0 +1,110 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  EMPLOYEE
+  ADMIN
+}
+
+enum BookingStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+  ACTIVE
+}
+
+enum RoomType {
+  CLASSROOM
+  LAB
+  MEETING
+  LARGE_CLASSROOM
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(USER)
+  phone     String?
+  avatar    String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  bookings  Booking[] @relation("BookingUser")
+  approvals Booking[] @relation("BookingApprover")
+
+  @@map("users")
+}
+
+model Room {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  building    String
+  floor       Int      @default(1)
+  capacity    Int
+  type        RoomType @default(CLASSROOM)
+  color       String   @default("#7C3AED")
+  description String?
+  facilities  String?  @db.Text
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  bookings Booking[]
+
+  @@map("rooms")
+}
+
+model Booking {
+  id             String        @id @default(cuid())
+  date           DateTime      @db.Date
+  startTime      String
+  endTime        String
+  course         String
+  level          String
+  students       Int
+  equipment      String?       @db.Text
+  note           String?       @db.Text
+  status         BookingStatus @default(PENDING)
+  rejectedReason String?
+
+  userId String
+  user   User   @relation("BookingUser", fields: [userId], references: [id])
+
+  roomId String
+  room   Room   @relation(fields: [roomId], references: [id])
+
+  approvedById String?
+  approvedBy   User?     @relation("BookingApprover", fields: [approvedById], references: [id])
+  approvedAt   DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([date])
+  @@index([roomId])
+  @@index([userId])
+  @@index([status])
+  @@map("bookings")
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@map("notifications")
+}
